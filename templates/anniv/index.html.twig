@@ -1,0 +1,15 @@
+{# templates/anniv/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Anniversaires{% endblock %}
+
+{% block body %}
+    <h1>Liste des Anniversaires</h1>
+
+    <ul>
+        {% for anniversaire in anniversaires %}
+            <li>{{ anniversaire.nom }} - {{ anniversaire.date|date('Y-m-d') }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

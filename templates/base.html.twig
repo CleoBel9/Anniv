@@ -1,0 +1,22 @@
+{# templates/base.html.twig #}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mon Application{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ path('app_anniv') }}">Liste des Anniversaires</a></li>
+            <!-- Ajoutez d'autres liens de navigation ici si nécessaire -->
+        </ul>
+    </nav>
+
+    <div>
+        {% block body %}{% endblock %}
+    </div>
+</body>
+</html>

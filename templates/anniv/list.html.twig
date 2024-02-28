@@ -1,0 +1,33 @@
+{# templates/anniv/list.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Anniversaires{% endblock %}
+
+{% block body %}
+    <h1>Liste des Anniversaires</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for anniversaire in anniversaires %}
+                <tr>
+                    <td>{{ anniversaire.nom }}</td>
+                    <td>{{ anniversaire.date|date('Y-m-d') }}</td>
+                    <td>
+                        <a href="{{ path('app_anniv_edit', {'id': anniversaire.id}) }}">Modifier</a>
+                        <a href="{{ path('app_anniv_delete', {'id': anniversaire.id}) }}" onclick="return confirm('Voulez-vous vraiment supprimer cet anniversaire ?')">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_anniv_add') }}">Ajouter un Anniversaire</a>
+{% endblock %}

@@ -2,18 +2,74 @@
 
 namespace App\Controller;
 
+use App\Entity\Anniv;
+use App\Form\AnnivType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class AnnivController extends AbstractController
 {
     #[Route('/anniv', name: 'app_anniv')]
-    public function index(): JsonResponse
+    public function index(): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/AnnivController.php',
+        $anniversaires = $this->getDoctrine()->getRepository(Anniv::class)->findAll();
+
+        return $this->render('anniv/index.html.twig', [
+            'anniversaires' => $anniversaires,
         ]);
+    }
+
+    #[Route('/anniv/add', name: 'app_anniv_add')]
+    public function add(Request $request): Response
+    {
+        $anniversaire = new Anniv();
+        $form = $this->createForm(AnnivType::class, $anniversaire);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($anniversaire);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_anniv');
+        }
+
+        return $this->render('anniv/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/anniv/edit/{id}', name: 'app_anniv_edit')]
+    public function edit(Request $request, Anniv $anniversaire): Response
+    {
+        $form = $this->createForm(AnnivType::class, $anniversaire);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('app_anniv');
+        }
+
+        return $this->render('anniv/edit.html.twig', [
+            'anniversaire' => $anniversaire,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/anniv/delete/{id}', name: 'app_anniv_delete')]
+    public function delete(Request $request, Anniv $anniversaire): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $anniversaire->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($anniversaire);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_anniv');
     }
 }
