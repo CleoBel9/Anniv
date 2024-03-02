@@ -8,10 +8,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\Mapping as ORM;
 
 class AnnivController extends AbstractController
 {
-    #[Route('/anniv', name: 'app_anniv')]
+    #[Route('/index', name: 'app_anniv')]
     public function index(): Response
     {
         $anniversaires = $this->getDoctrine()->getRepository(Anniv::class)->findAll();
@@ -71,5 +72,11 @@ class AnnivController extends AbstractController
         }
 
         return $this->redirectToRoute('app_anniv');
+    }
+
+    #[Route('/accueil', name: 'app_accueil')]
+    public function accueil(): Response
+    {
+        return $this->render('anniv/accueil.html.twig');
     }
 }
