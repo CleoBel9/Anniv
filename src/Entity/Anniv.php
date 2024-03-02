@@ -6,7 +6,7 @@ use App\Repository\AnnivTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnnivTypeRepository::class)]
-class AnnivType
+class Anniv
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

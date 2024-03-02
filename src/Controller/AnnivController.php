@@ -3,18 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Anniv;
+use App\Entity\AnnivType as EntityAnnivType;
 use App\Form\AnnivType;
+use App\Repository\AnnivTypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\Mapping as ORM;
 
 class AnnivController extends AbstractController
 {
-    #[Route('/index', name: 'app_anniv')]
-    public function index(): Response
-    {
+        #[Route('/', name: 'app_anniv', methods: ['GET'])]
+        public function index(AnnivTypeRepository $todoRepository, Request $request): Response
+        {
         $anniversaires = $this->getDoctrine()->getRepository(Anniv::class)->findAll();
 
         return $this->render('anniv/index.html.twig', [
@@ -26,7 +27,7 @@ class AnnivController extends AbstractController
     public function add(Request $request): Response
     {
         $anniversaire = new Anniv();
-        $form = $this->createForm(AnnivType::class, $anniversaire);
+        $form = $this->createForm(Anniv::class, $anniversaire);
 
         $form->handleRequest($request);
 
@@ -46,7 +47,7 @@ class AnnivController extends AbstractController
     #[Route('/anniv/edit/{id}', name: 'app_anniv_edit')]
     public function edit(Request $request, Anniv $anniversaire): Response
     {
-        $form = $this->createForm(AnnivType::class, $anniversaire);
+        $form = $this->createForm(Anniv::class, $anniversaire);
 
         $form->handleRequest($request);
 
